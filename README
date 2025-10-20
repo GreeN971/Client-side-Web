@@ -1,0 +1,2 @@
+Includes folder will contain only methods that user will never see. 
+Classes folder is for classes since project is based on OOP instead of being procedural. 
