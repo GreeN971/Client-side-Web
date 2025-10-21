@@ -18,6 +18,6 @@ if(isset($_POST["submit"])) #name="submit"
     //Going back to front page
     //init_set('display errors', 1);
     //error_reporting(E_ALL);
-    header("location: ../index.php?error=none");
+    header("location: ../pages/profile.php");
     exit();
 }
