@@ -8,7 +8,6 @@ if(isset($_POST["submit"])) #name="submit"
     $pwdRepeat = $_POST["pwdRepeat"]; #there may be a typo and its suppose to be pwdRepeat
     $email = $_POST["email"];
 
-
     //Inicialize SignContr class
     require_once "../classes/dbh.classes.php"; #include order is important database first 
     require_once "../classes/signup.classes.php";

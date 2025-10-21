@@ -11,7 +11,7 @@ class Signup extends Dbh {
         if(!$stmt->execute(array($uid, $hashedPwd, $email))) 
         { 
             $stmt = null;
-            header("location: ../index.php?error=stmtfailed");
+            header("location: ../index.php?error=failedtogetdatafromdb");
             exit();
         }
         $stmt = null;
@@ -25,13 +25,13 @@ class Signup extends Dbh {
         if(!$stmt->execute(array($uid, $email))) #Reason for being false is when any data is grabbed then its true and user found
         { 
             $stmt = null; #delete data from the statement
-            header("location: ../index.php?error=stmtfailed"); #sends back to index page
+            header("location: ../index.php?error=failedtogetdatafromdb"); #sends back to index page
             exit();
         }
 
         if($stmt->rowCount() > 0)
-            return $result = false;
-        return $result = true;
+            return false;
+        return true;
     }
 
 }

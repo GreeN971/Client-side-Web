@@ -9,7 +9,7 @@ class Login extends Dbh {
         if(!$stmt->execute(array($uid, $pwd))) 
         { 
             $stmt = null;
-            header("location: ../index.php?error=stmfailed");
+            header("location: ../index.php?error=failedtogetdatafromdb");
             exit();
         }
 
@@ -35,7 +35,7 @@ class Login extends Dbh {
             if(!$stmt->execute(array($uid, $uid, $hashedPwd))) 
             { 
                 $stmt = null;
-                header("location: ../index.php?error=stmtfailed");
+                header("location: ../index.php?error=failedtogetdatafromdb");
                 exit();
             }
 

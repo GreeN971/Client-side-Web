@@ -14,7 +14,7 @@ class LoginContr  extends Login{
     //Methods of the class
     public function loginUser(){
         if($this->emptyInput() == true){
-            echo "Empty input";
+            //
             header("location: ../index.php?error=emptyinput");
             exit();
         }
@@ -23,8 +23,8 @@ class LoginContr  extends Login{
     }
 
     private function emptyInput(){
-        if(!empty($this->uid || $this->pwd))
-            return $result = true;
-        return $result = false;
+        if(empty($this->uid) || empty($this->pwd))
+            return true;
+        return false;
     }
 }

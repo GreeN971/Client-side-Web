@@ -11,6 +11,8 @@
     <link ref="stylesheet" href= "src/style.css">
 </head>
 <body>
+    <!-- script which scans for the URL if there is a error tag inside --> 
+    <script src = "scripts/alerts.js" > </script>
     <header> 
         <h1> My header area <h1> 
         <nav>
@@ -25,6 +27,7 @@
 
     <ul class="menu-member">
         <?php
+        echo '<script> alert("Login success")</script>';
         if (isset($_SESSION["userid"])) {
         ?>
             <li><a href="#"><?php echo $_SESSION["useruid"]; ?></a></li>
