@@ -17,11 +17,11 @@ class SignupContr  extends Signup{
 
     //Methods of the class
     public function signupUser(){
-        // if($this->emptyInput() == false){
-        //     echo "Empty input";
-        //     header("location: ../index.php?error=emptyinput");
-        //     exit();
-        // } TO DO FIX THIS NOT WORKING
+        if($this->emptyInput() == true){
+            echo "Empty input";
+            header("location: ../index.php?error=emptyinput");
+            exit();
+        } 
 
         if($this->invalidUid() == false){
             echo "Invalid uId";
@@ -51,7 +51,7 @@ class SignupContr  extends Signup{
     }
 
     private function emptyInput(){
-        if(empty($this->uid || $this->pwd || $this->pwdRepeat || $this->email))
+        if(!empty($this->uid || $this->pwd || $this->pwdRepeat || $this->email))
             return $result = true;
         return $result = false;
     }

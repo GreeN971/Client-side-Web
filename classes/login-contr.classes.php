@@ -13,17 +13,17 @@ class LoginContr  extends Login{
 
     //Methods of the class
     public function loginUser(){
-        // if($this->emptyInput() == false){
-        //     echo "Empty input";
-        //     header("location: ../index.php?error=emptyinput");
-        //     exit();
-        // }
+        if($this->emptyInput() == true){
+            echo "Empty input";
+            header("location: ../index.php?error=emptyinput");
+            exit();
+        }
 
         $this->getUser($this->uid, $this->pwd);
     }
 
     private function emptyInput(){
-        if(empty($this->uid || $this->pwd))
+        if(!empty($this->uid || $this->pwd))
             return $result = true;
         return $result = false;
     }
