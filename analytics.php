@@ -1,0 +1,218 @@
+<?php
+    session_start();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotional Flow - Analytics</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/analytics.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo">EF</div>
+                <h1 class="brand-name-sm">Emotional Flow</h1>
+            </div>
+            <nav class="header-nav">
+                <button class="logout-button" id="logoutBtn" aria-label="Logout">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>Logout</span>
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- Left Column: Calendar & Check-in -->
+                <aside class="sidebar">
+                    <!-- Calendar Widget -->
+                    <div class="widget calendar-widget">
+                        <!-- Legend -->
+                        <div class="emotion-legend" id="emotionLegend">
+                            <!-- Populated by JS -->
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <!-- Month Nav -->
+                        <div class="month-nav">
+                            <button class="nav-btn" id="prevMonth" aria-label="Previous month">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
+                            <h2 class="current-month" id="currentMonth">October 2023</h2>
+                            <button class="nav-btn" id="nextMonth" aria-label="Next month">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Calendar Grid -->
+                        <div class="calendar-grid">
+                            <div class="calendar-header">
+                                <span>S</span>
+                                <span>M</span>
+                                <span>T</span>
+                                <span>W</span>
+                                <span>T</span>
+                                <span>F</span>
+                                <span>S</span>
+                            </div>
+                            <div class="calendar-days" id="calendarDays">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Calendar Submit Section -->
+                        <div class="calendar-submit-section">
+                            <span class="selected-date-display hidden" id="selectedDateDisplay"></span>
+                            <button class="btn btn-secondary btn-full" id="calendarSubmitBtn" disabled>View Selected Date</button>
+                        </div>
+                    </div>
+
+                    <!-- Start Check-in Widget -->
+                    <div class="widget checkin-widget">
+                        <p class="checkin-prompt">How are you feeling right now?</p>
+                        <button class="btn btn-primary btn-full" id="startCheckin">Start Check-in</button>
+                        <div class="last-checkin">
+                            <span>Last check-in:</span>
+                            <span class="emotion-dot" style="background-color: #c084fc;"></span>
+                            <span class="last-emotion">Feeling Anxious</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Right Column: Weekly Trends & Day Details -->
+                <div class="main-column">
+                    <!-- Weekly Trends -->
+                    <section class="widget trends-widget">
+                        <h2 class="widget-title">Your Weekly Trends Placeholder</h2>
+                        
+                        <div class="chart-container">
+                            <div class="bar-chart" id="weeklyChart">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Day Details Section -->
+                    <section class="widget details-widget">
+                        <div class="widget-header">
+                            <h2 class="widget-title">Day Details: October 5th</h2>
+                            <button class="link-btn" id="readMoreBtn">Read more</button>
+                        </div>
+
+                        <div class="day-entries" id="dayEntries">
+                            <!-- Populated by JS -->
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Check-in Modal -->
+    <div class="modal-overlay" id="checkinModal">
+        <div class="modal checkin-modal">
+            <!-- Header / Progress -->
+            <div class="modal-header">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="checkinProgress"></div>
+                    </div>
+                    <button class="close-btn" id="closeCheckin" aria-label="Close modal">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="step-nav">
+                    <button class="back-btn hidden" id="backBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Back
+                    </button>
+                    <span class="step-indicator" id="stepIndicator">Step 1/2</span>
+                </div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <!-- Step 1: Emotion Selection -->
+            <div class="modal-content" id="step1Content">
+                <h2 class="modal-title">Which category best describes your feeling?</h2>
+                
+                <div class="emotion-grid" id="emotionGrid">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn btn-primary" id="nextBtn" disabled>Next</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Description -->
+            <div class="modal-content hidden" id="step2Content">
+                <h2 class="modal-title">Why do you feel this way?</h2>
+                
+                <div class="description-container">
+                    <textarea 
+                        class="description-input" 
+                        id="descriptionInput"
+                        placeholder="Describe your feelings..."
+                    ></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn btn-primary btn-submit" id="submitBtn">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Daily Details Modal -->
+    <div class="modal-overlay" id="detailsModal">
+        <div class="modal details-modal">
+            <div class="modal-header-details">
+                <h2 class="modal-title-sm">Daily Details: October 5th, 2025</h2>
+                <button class="close-btn" id="closeDetails" aria-label="Close modal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body-details">
+                <!-- Notes & Timeline -->
+                <main class="timeline-content">
+                    <div class="timeline-wrapper">
+                        <h3 class="timeline-title">Your Notes and Timeline</h3>
+                        
+                        <div class="timeline" id="timelineEntries">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/analytics.js"></script>
+</body>
+</html>

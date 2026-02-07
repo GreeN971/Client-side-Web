@@ -1,5 +1,5 @@
 <?php
-require_once "../classes/dbh.classes.php";
+require_once "dbh.classes.php";
 
 class Signup extends Dbh {
 
@@ -18,14 +18,12 @@ class Signup extends Dbh {
     }
 
     protected function checkUser($uid, $email){
-        $stmt = $this->connect()->prepare('SELECT users_uid FROM users WHERE users_uid = ? OR users_email = ?;'); #user_id = $uid UNSAFE
-        //? works as placeholder, since actuall data are separated from the query, it protecs from SQL injection
-        //So bassically I get an array with all the users
+        $stmt = $this->connect()->prepare('SELECT users_uid FROM users WHERE users_uid = ? OR users_email = ?;');
         
-        if(!$stmt->execute(array($uid, $email))) #Reason for being false is when any data is grabbed then its true and user found
+        if(!$stmt->execute(array($uid, $email)))
         { 
-            $stmt = null; #delete data from the statement
-            header("location: ../index.php?error=failedtogetdatafromdb"); #sends back to index page
+            $stmt = null;
+            header("location: ../index.php?error=failedtogetdatafromdb");
             exit();
         }
 

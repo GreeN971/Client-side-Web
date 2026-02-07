@@ -1,12 +1,12 @@
 <?php
-require_once "../classes/dbh.classes.php";
+require_once "dbh.classes.php";
 
 class Login extends Dbh {
 
     protected function getUser($uid, $pwd){
-        $stmt = $this->connect()->prepare('SELECT users_pwd FROM users WHERE users_uid = ? OR users_email = ? ;');
+        $stmt = $this->connect()->prepare('SELECT users_pwd FROM users WHERE users_uid = ? OR users_email = ?;');
         
-        if(!$stmt->execute(array($uid, $pwd))) 
+        if(!$stmt->execute(array($uid, $uid))) 
         { 
             $stmt = null;
             header("location: ../index.php?error=failedtogetdatafromdb");
@@ -21,9 +21,9 @@ class Login extends Dbh {
         }
 
         $pwdHashed = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $checkPassword = password_verify($pwd, $pwdHashed[0]["users_pwd"]); #true  or false
-        //With this user can login via email or username
-        if(!$checkPassword) //name
+        $checkPassword = password_verify($pwd, $pwdHashed[0]["users_pwd"]);
+
+        if(!$checkPassword)
         {
             $stmt = null;
             header("location: ../index.php?error=wrongpassword");
@@ -31,8 +31,8 @@ class Login extends Dbh {
         }
         elseif($checkPassword)
         {
-            $stmt = $this->connect()->prepare('SELECT * FROM users WHERE users_uid = ? OR users_email = ? and users_pwd = ?;');
-            if(!$stmt->execute(array($uid, $uid, $hashedPwd))) 
+            $stmt = $this->connect()->prepare('SELECT * FROM users WHERE users_uid = ? OR users_email = ?;');
+            if(!$stmt->execute(array($uid, $uid))) 
             { 
                 $stmt = null;
                 header("location: ../index.php?error=failedtogetdatafromdb");

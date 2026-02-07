@@ -1,49 +1,36 @@
 <?php
-//For changing something inside db aka INSERT or UPDATE
-class SignupContr  extends Signup{
-    //private variables
+
+class SignupContr extends Signup {
     private $uid;
     private $pwd;
     private $pwdRepeat;
     private $email;
 
-    //Constructor
-    public function __construct($uid, $pwd, $pwdRepeat,$email){
-        $this->uid = $uid; #This points to the class instance and uid is the value that has been passed to the constructor
+    public function __construct($uid, $pwd, $pwdRepeat, $email){
+        $this->uid = $uid;
         $this->pwd = $pwd;
         $this->pwdRepeat = $pwdRepeat;
         $this->email = $email;
     }
 
-    //Methods of the class
     public function signupUser(){
         if($this->emptyInput() == true){
-            echo "Empty input";
-            header("location: ../index.php?error=emptyinput");
+            header("location: ../signup.php?error=emptyinput");
             exit();
         } 
 
-        if($this->invalidUid() == false){
-            echo "Invalid uId";
-            header("location: ../index.php?error=invaliduid");
-            exit();
-        }
-
         if($this->invalidEmail() == false){
-            echo "Invalid email";
-            header("location: ../index.php?error=invalidemail");
+            header("location: ../signup.php?error=invalidemail");
             exit();
         }
 
         if($this->pwdMatch() == false){
-            echo "Password does not match";
-            header("location: ../index.php?error=passworddoesnotmatch");
+            header("location: ../signup.php?error=passworddoesnotmatch");
             exit();
         }
 
         if($this->uidTakenCheck() == false){
-            echo "Email or username is already being used";
-            header("location: ../index.php?error=emailusernameused");
+            header("location: ../signup.php?error=emailusernameused");
             exit();
         }
 
@@ -51,7 +38,7 @@ class SignupContr  extends Signup{
     }
 
     private function emptyInput(){
-        if(empty($this->uid || $this->pwd || $this->pwdRepeat || $this->email))
+        if(empty($this->uid) || empty($this->pwd) || empty($this->pwdRepeat) || empty($this->email))
             return true;
         return false;
     }

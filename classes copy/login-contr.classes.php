@@ -1,20 +1,16 @@
 <?php
-//For changing something inside db aka INSERT or UPDATE
-class LoginContr  extends Login{
-    //private variables
+
+class LoginContr extends Login {
     private $uid;
     private $pwd;
 
-    //Constructor
     public function __construct($uid, $pwd){
-        $this->uid = $uid; #This points to the class instance and uid is the value that has been passed to the constructor
+        $this->uid = $uid;
         $this->pwd = $pwd;
     }
 
-    //Methods of the class
     public function loginUser(){
         if($this->emptyInput() == true){
-            //
             header("location: ../index.php?error=emptyinput");
             exit();
         }
