@@ -1,5 +1,17 @@
 <?php
     session_start();
+
+    // Map error codes to user-friendly messages
+    $errorMessages = [
+        'emptyinput' => 'Please fill in all fields!',
+        'invalidemail' => 'Invalid email address.',
+        'passworddoesnotmatch' => 'Passwords do not match.',
+        'emailusernameused' => 'Email or username is already taken.',
+        'failedtogetdatafromdb' => 'Something went wrong. Please try again.',
+    ];
+
+    $error = isset($_GET['error']) ? $_GET['error'] : null;
+    $errorMessage = ($error && isset($errorMessages[$error])) ? $errorMessages[$error] : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,8 +34,14 @@
                         <p class="welcome-subtitle">Join us to track your mood</p>
                     </div>
 
+                    <?php if ($errorMessage): ?>
+                        <div class="error-banner" style="background:#fee;color:#c00;padding:10px 15px;border-radius:6px;margin-bottom:15px;text-align:center;font-size:14px;">
+                            <?php echo htmlspecialchars($errorMessage); ?>
+                        </div>
+                    <?php endif; ?>
+
                     <!-- Form -->
-                    <form id="signupForm" class="auth-form" action="includes/signup.inc.php" method="post" novalidate>
+                    <form id="signupForm" class="auth-form" action="includes/signup.inc.php" method="post">
                         <!-- Email Input -->
                         <div class="form-group">
                             <label for="email-input" class="form-label">Email address</label>
@@ -40,6 +58,20 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label for="email-input" class="form-label">Username</label>
+                            <div class="input-wrapper">
+                                <input
+                                    id="username-input"
+                                    name="username"
+                                    placeholder="User username"
+                                    type="text"
+                                    required
+                                    class="form-input"
+                                />
+                            </div>
+                        </div>
+
                         <!-- Password Input -->
                         <div class="form-group">
                             <label for="password-input" class="form-label">Password</label>
@@ -47,7 +79,7 @@
                                 <input
                                     id="password-input"
                                     name="password"
-                                    placeholder="your_password"
+                                    placeholder="Your password"
                                     type="password"
                                     autocomplete="new-password"
                                     required
@@ -125,13 +157,12 @@
             <!-- Illustration Section -->
             <aside class="illustration-section">
                 <div class="illustration-placeholder">
-                    <img src="images/illustration.png" alt="Track Your Emotions" class="illustration-image">
+                    <img src="images/listening-to-feedback.png" alt="Track Your Emotions" class="illustration-image">
                 </div>
             </aside>
         </div>
     </main>
 
-    <script src="js/alerts.js"></script>
-    <script src="js/signup.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 </html>

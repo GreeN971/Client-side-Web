@@ -1,15 +1,17 @@
 <?php
 
 class SignupContr extends Signup {
-    private $uid;
+    private $username ; //add username validation on both sides for special characters
     private $pwd;
     private $pwdRepeat;
     private $email;
+    private $petsname;
 
-    public function __construct($uid, $pwd, $pwdRepeat, $email){
-        $this->uid = $uid;
+    public function __construct($username, $pwd, $pwdRepeat, $email, $petsname){
+        $this->username = $username;
         $this->pwd = $pwd;
         $this->pwdRepeat = $pwdRepeat;
+        $this->petsname = $petsname;
         $this->email = $email;
     }
 
@@ -29,22 +31,22 @@ class SignupContr extends Signup {
             exit();
         }
 
-        if($this->uidTakenCheck() == false){
+        if($this->usernameTakenCheck() == false){
             header("location: ../signup.php?error=emailusernameused");
             exit();
         }
 
-        $this->setUser($this->uid, $this->pwd, $this->email);
+        $this->setUser($this->username, $this->pwd, $this->email, $this->petsname);
     }
 
     private function emptyInput(){
-        if(empty($this->uid) || empty($this->pwd) || empty($this->pwdRepeat) || empty($this->email))
+        if(empty($this->username) || empty($this->pwd) || empty($this->pwdRepeat) || empty($this->email))
             return true;
         return false;
     }
 
-    private function invalidUid(){
-        if(!preg_match("/^[a-zA-Z0-9]*$/", $this->uid))
+    private function invalidusername(){
+        if(!preg_match("/^[a-zA-Z0-9]*$/", $this->username))
             return false;
         return true;
     }
@@ -61,8 +63,8 @@ class SignupContr extends Signup {
         return true;
     }
 
-    private function uidTakenCheck(){
-        if(!$this->checkUser($this->uid, $this->email))
+    private function usernameTakenCheck(){
+        if(!$this->checkUser($this->username, $this->email))
             return false;
         return true;
     }

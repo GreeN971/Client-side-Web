@@ -1,8 +1,9 @@
 // Signup Page JavaScript
+// Only handles password visibility toggle (UI concern).
+// All validation and form submission is handled server-side by PHP.
 
 document.addEventListener('DOMContentLoaded', function() {
     initPasswordToggle();
-    initSignupForm();
 });
 
 /**
@@ -29,43 +30,4 @@ function initPasswordToggle() {
             }
         });
     });
-}
-
-/**
- * Initialize signup form
- * Client-side validation only — form submits to PHP backend via action="includes/signup.inc.php"
- */
-function initSignupForm() {
-    const signupForm = document.getElementById('signupForm');
-    
-    if (signupForm) {
-        signupForm.addEventListener('submit', function(e) {
-            const email = document.getElementById('email-input').value.trim();
-            const password = document.getElementById('password-input').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            
-            // Basic client-side validation
-            if (!email || !password || !confirmPassword) {
-                e.preventDefault();
-                alert('Please fill in all required fields');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                e.preventDefault();
-                const mismatchEl = document.getElementById('password-mismatch');
-                if (mismatchEl) mismatchEl.classList.remove('hidden');
-                alert('Passwords do not match');
-                return;
-            }
-            
-            // Store pet name in localStorage (for forgot password feature)
-            const petName = document.getElementById('pet-name').value;
-            if (petName) {
-                localStorage.setItem('petName', petName);
-            }
-            
-            // Let the form submit naturally to PHP backend
-        });
-    }
 }

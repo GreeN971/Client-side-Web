@@ -32,12 +32,12 @@
                     <form id="loginForm" class="auth-form" action="includes/login.inc.php" method="post" novalidate>
                         <!-- Email Input -->
                         <div class="form-group">
-                            <label for="email-input" class="form-label">Email address</label>
+                            <label for="email-input" class="form-label">Email address or Username</label>
                             <div class="input-wrapper">
                                 <input
                                     id="email-input"
                                     name="email"
-                                    placeholder="your@mail.com"
+                                    placeholder="your@mail.com or username"
                                     type="text"
                                     autocomplete="email"
                                     required

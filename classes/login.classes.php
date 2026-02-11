@@ -2,11 +2,20 @@
 require_once "dbh.classes.php";
 
 class Login extends Dbh {
+    protected function getUser($username, $email, $pwd){
+        $identifier;
+        if($username == NULL)
+        {
+            $stmt = $this->connect()->prepare('SELECT * FROM users WHERE users_email = ?;');
+            $identifier = $email;
+        }
+        else 
+        {
+            $stmt = $this->connect()->prepare('SELECT * FROM users WHERE username = ?;');
+            $identifier = $username;
+        }
 
-    protected function getUser($uid, $pwd){
-        $stmt = $this->connect()->prepare('SELECT users_pwd FROM users WHERE users_uid = ? OR users_email = ?;');
-        
-        if(!$stmt->execute(array($uid, $uid))) 
+        if(!$stmt->execute(array($identifier, $pwd))) 
         { 
             $stmt = null;
             header("location: ../index.php?error=failedtogetdatafromdb");
@@ -21,6 +30,7 @@ class Login extends Dbh {
         }
 
         $pwdHashed = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //$stmt = null;
         $checkPassword = password_verify($pwd, $pwdHashed[0]["users_pwd"]);
 
         if(!$checkPassword)
@@ -29,10 +39,10 @@ class Login extends Dbh {
             header("location: ../index.php?error=wrongpassword");
             exit();
         }
-        elseif($checkPassword)
+        else
         {
-            $stmt = $this->connect()->prepare('SELECT * FROM users WHERE users_uid = ? OR users_email = ?;');
-            if(!$stmt->execute(array($uid, $uid))) 
+            $stmt = $this->connect()->prepare('SELECT * FROM users WHERE users_email = ? AND users_pwd = ?;');
+            if(!$stmt->execute([$identifier, $pwdHashed])) 
             { 
                 $stmt = null;
                 header("location: ../index.php?error=failedtogetdatafromdb");
@@ -50,7 +60,7 @@ class Login extends Dbh {
 
             session_start();
             $_SESSION["userid"] = $user[0]["users_id"];
-            $_SESSION["useruid"] = $user[0]["users_uid"];
+            $_SESSION["userusername"] = $user[0]["username"];
         }
 
         $stmt = null;

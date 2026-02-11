@@ -5,7 +5,7 @@ class Errors {
         failedtogetdatafromdb: "Failed to get data from the database.",
         usernotfound: "User not found.",
         wrongpassword: "Incorrect password.",
-        invaliduid: "Invalid username. Only letters and numbers allowed.",
+        invalidusername: "Invalid username. Only letters and numbers allowed.",
         invalidemail: "Invalid email address.",
         passworddoesnotmatch: "Passwords do not match.",
         emailusernameused: "Email or username is already taken.",

@@ -3,15 +3,15 @@
 /* ========================================
    WCAG-Compliant Responsive Text Scaling
    ========================================
-   - Uses clamp() for fluid typography
+   - Uses clamp() for flusername typography
    - Minimum font sizes ensure readability (WCAG SC 1.4.4)
    - Line heights maintain 1.5 ratio for body text (WCAG SC 1.4.12)
    - Supports 200% zoom without loss of content (WCAG SC 1.4.4)
    ======================================== */
 
-/* Base font scaling using clamp() for fluid typography */
+/* Base font scaling using clamp() for flusername typography */
 :root {
-    /* Fluid typography scale - min, preferred, max */
+    /* Flusername typography scale - min, preferred, max */
     --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);      /* 12px - 14px */
     --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);         /* 14px - 16px */
     --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);        /* 16px - 18px */
