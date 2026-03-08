@@ -12,7 +12,7 @@ class Signup extends Dbh {
         if(!$stmt->execute([$username, $hashedPwd, $email, $petsname])) 
         { 
             $stmt = null;
-            header("location: ../index.php?error=failedRegisteringUser");
+            header("Location: ../index.php?error=failedRegisteringUser");
             exit();
         }
 
@@ -25,7 +25,7 @@ class Signup extends Dbh {
         if(!$stmt->execute(array($username, $email)))
         { 
             $stmt = null;
-            header("location: ../index.php?error=failedtogetdatafromdb");
+            header("Location: ../index.php?error=failedtogetdatafromdb");
             exit();
         }
 

@@ -58,7 +58,7 @@ function initLoginForm() {
                 localStorage.setItem('isAdmin', 'true');
                 localStorage.setItem('userEmail', 'admin');
                 alert('Admin login successful! Redirecting...');
-                window.location.href = 'admin.php';
+                window.Location.href = 'admin.php';
                 return;
             }
             

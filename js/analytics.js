@@ -203,7 +203,7 @@ function initLogout() {
             localStorage.removeItem('userEmail');
             
             // Hit the PHP logout to destroy session, then redirect to login
-            window.location.href = 'includes/logout.inc.php';
+            window.Location.href = 'includes/logout.inc.php';
         });
     }
 }

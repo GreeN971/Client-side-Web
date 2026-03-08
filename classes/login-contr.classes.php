@@ -5,17 +5,17 @@ class LoginContr extends Login {
     private $email = NULL;
     private $pwd;
 
-    public function __construct($usernameOrEmail, $pwd){
-        if(strpos($usernameOrEmail, "@") !== false)
-            $this->email = $usernameOrEmail;
+    public function __construct($identification, $pwd){
+        if(strpos($identification, "@") !== false)
+            $this->email = $identification;
         else
-            $this->username= $usernameOrEmail;
+            $this->username= $identification;
         $this->pwd = $pwd;
     }
 
     public function loginUser(){
         if($this->emptyInput() == true){
-            header("location: ../index.php?error=emptyinput");
+            header("Location: ../index.php?error=emptyinput");
             exit();
         }
         //nakonec bylo nejlepsi vse nasetovat tady az pak v getUser resit email nebo username

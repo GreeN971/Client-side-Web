@@ -1,21 +1,22 @@
 <?php
 if(isset($_POST["submit"]))
 {
-    $username = $_POST["email"];
+    $identification = $_POST["email"];
     $pwd = $_POST["password"];
 
     require_once "../classes/dbh.classes.php";
     require_once "../classes/login.classes.php";
     require_once "../classes/login-contr.classes.php";
-    $login = new LoginContr($username, $pwd);
+    $login = new LoginContr($identification, $pwd);
 
     $login->loginUser();
 
-    header("location: ../analytics.php");
+    header("Location: ../analytics.php");
     exit();
 }
 else
 {
-    header("location: ../index.php");
+    header("Location: ../index.php");
     exit();
 }
+?>

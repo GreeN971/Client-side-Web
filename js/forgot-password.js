@@ -72,7 +72,7 @@ function initForgotPasswordForm() {
             console.log('Password reset submitted', { petName });
             
             alert('Password reset successfully! Please log in with your new password.');
-            window.location.href = 'index.php';
+            window.Location.href = 'index.php';
         });
     }
 }

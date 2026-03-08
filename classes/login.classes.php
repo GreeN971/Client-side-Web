@@ -14,21 +14,21 @@ class Login extends Dbh {
             $stmt = $this->connect()->prepare('SELECT * FROM users WHERE username = ?;');
             $identifier = $username;
         }
+        echo "<script>console.log('Debug Objects: " . $identifier . "' );</script>";
 
-        if(!$stmt->execute(array($identifier, $pwd))) 
+        if(!$stmt->execute(array($identifier)))
         { 
             $stmt = null;
-            header("location: ../index.php?error=failedtogetdatafromdb");
+            //header("Location: ../index.php?error=failedtogetdatafromdb");
             exit();
         }
-
+        
         if($stmt->rowCount() == 0)
         {
             $stmt = null;
-            header("location: ../index.php?error=usernotfound");
+            //header("Location: ../index.php?error=usernotfound");
             exit();
         }
-
         $pwdHashed = $stmt->fetchAll(PDO::FETCH_ASSOC);
         //$stmt = null;
         $checkPassword = password_verify($pwd, $pwdHashed[0]["users_pwd"]);
@@ -36,23 +36,23 @@ class Login extends Dbh {
         if(!$checkPassword)
         {
             $stmt = null;
-            header("location: ../index.php?error=wrongpassword");
+            header("Location: ../index.php?error=wrongpassword");
             exit();
         }
         else
         {
             $stmt = $this->connect()->prepare('SELECT * FROM users WHERE users_email = ? AND users_pwd = ?;');
-            if(!$stmt->execute([$identifier, $pwdHashed])) 
+            if(!$stmt->execute(array($identifier, $pwdHashed[0]["users_pwd"]))) 
             { 
-                $stmt = null;
-                header("location: ../index.php?error=failedtogetdatafromdb");
+                $stmt = NuLl;
+                header("Location: ../index.php?error=failedtogetdatafromdb");
                 exit();
             }
 
             if($stmt->rowCount() == 0)
             {
                 $stmt = null;
-                header("location: ../index.php?error=usernotfound");
+                header("Location: ../index.php?error=usernotfound");
                 exit();
             }
 
@@ -62,7 +62,6 @@ class Login extends Dbh {
             $_SESSION["userid"] = $user[0]["users_id"];
             $_SESSION["userusername"] = $user[0]["username"];
         }
-
         $stmt = null;
     }
 

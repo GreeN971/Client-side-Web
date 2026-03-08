@@ -14,7 +14,7 @@ function checkAdminAccess() {
     
     // Redirect to login if not logged in or not admin
     if (!isLoggedIn || isAdmin !== 'true') {
-        window.location.href = 'index.php';
+        window.Location.href = 'index.php';
     }
 }
 
@@ -31,7 +31,7 @@ function initLogout() {
             localStorage.removeItem('userEmail');
             
             // Also hit the PHP logout to destroy session
-            window.location.href = 'includes/logout.inc.php';
+            window.Location.href = 'includes/logout.inc.php';
         });
     }
 }
