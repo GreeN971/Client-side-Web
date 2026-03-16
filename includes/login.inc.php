@@ -11,7 +11,11 @@ if(isset($_POST["submit"]))
 
     $login->loginUser();
 
-    header("Location: ../analytics.php");
+    if (!empty($_SESSION['is_admin']) && (int)$_SESSION['is_admin'] === 1) {
+        header("Location: ../admin.php");
+    } else {
+        header("Location: ../analytics.php");
+    }
     exit();
 }
 else

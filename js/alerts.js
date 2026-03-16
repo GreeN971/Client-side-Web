@@ -13,7 +13,7 @@ class Errors {
     };
 
     static showFromUrl() {
-        const params = new URLSearchParams(window.Location.search);
+        const params = new URLSearchParams(window.location.search);
         const error = params.get("error");
         if (!error) return;
 
@@ -23,7 +23,7 @@ class Errors {
         }
 
         // Clean the URL
-        window.history.replaceState({}, document.title, window.Location.pathname);
+        window.history.replaceState({}, document.title, window.location.pathname);
     }
 }
 
