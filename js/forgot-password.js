@@ -32,6 +32,42 @@ function initPasswordToggle() {
 }
 
 /**
+ * Initialize forgot password form — submits to PHP backend.
+ */
+function initForgotPasswordForm() {
+    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+    
+    if (forgotPasswordForm) {
+        forgotPasswordForm.addEventListener('submit', function(e) {
+            const identification     = document.getElementById('identification').value.trim();
+            const petName            = document.getElementById('pet-name').value.trim();
+            const newPassword        = document.getElementById('new-password').value;
+            const confirmNewPassword = document.getElementById('confirm-new-password').value;
+            
+            if (!identification || !petName || !newPassword || !confirmNewPassword) {
+                e.preventDefault();
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            if (newPassword.length < 8) {
+                e.preventDefault();
+                alert('Password must be at least 8 characters');
+                return;
+            }
+            
+            if (newPassword !== confirmNewPassword) {
+                e.preventDefault();
+                alert('Passwords do not match');
+                return;
+            }
+            // Valid — let the form POST to PHP naturally
+        });
+    }
+}
+
+
+/**
  * Initialize forgot password form
  */
 function initForgotPasswordForm() {

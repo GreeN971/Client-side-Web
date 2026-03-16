@@ -1,5 +1,5 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) session_start();
 
 if (empty($_SESSION['userid']) || empty($_SESSION['is_admin']) || (int)$_SESSION['is_admin'] !== 1) {
     header("Location: index.php?error=notauthorized");
@@ -10,9 +10,9 @@ require_once "classes/dbh.classes.php";
 require_once "classes/admin.classes.php";
 
 $admin   = new Admin();
-$stats   = $admin->getStats();
+$stats   = $admin->getDemoStats();
 $users   = $admin->getAllUsers();
-$dailyAU = $admin->getDailyActiveUsers();
+$dailyAU = $admin->getDemoDailyActiveUsers();
 $dailyAU = array_combine(array_column($dailyAU, 'date'), array_column($dailyAU, 'count'));
 
 // Build a full 30-day series so days with 0 are included
@@ -110,7 +110,11 @@ for ($i = 29; $i >= 0; $i--) {
 
         <!-- ── All users ────────────────────────────────────────────────── -->
         <section class="panel users-panel">
-            <h2 class="panel-title">All Users</h2>
+            <div class="panel-header">
+                <h2 class="panel-title" style="border:none;padding-bottom:0">All Users</h2>
+                <input type="search" id="userSearch" class="search-input"
+                       placeholder="Search by username or email…" autocomplete="off">
+            </div>
             <?php if (isset($_GET['success'])): ?>
                 <p class="flash flash-ok">
                     User has been <?= htmlspecialchars($_GET['success']) ?>ned successfully.
@@ -173,7 +177,7 @@ for ($i = 29; $i >= 0; $i--) {
 </div>
 
 <script>
-const DAU_DATA = <?= json_encode(array_values($dauData)) ?>;
+var DAU_DATA = <?= json_encode(array_values($dauData)) ?>;
 </script>
 <script src="js/admin.js"></script>
 </body>

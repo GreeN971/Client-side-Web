@@ -4,16 +4,17 @@ document.addEventListener('DOMContentLoaded', function () {
     renderDauChart();
     pollOnlineUsers();
     setInterval(pollOnlineUsers, 5000);
+    initUserSearch();
 });
 
 // ── DAU bar chart ─────────────────────────────────────────────────────────────
 function renderDauChart() {
     const container = document.getElementById('dauChart');
-    if (!container || !window.DAU_DATA) return;
+    if (!container || typeof DAU_DATA === 'undefined' || !DAU_DATA.length) return;
 
-    const max = Math.max(...DAU_DATA.map(d => d.count), 1);
+    const max  = Math.max(...DAU_DATA.map(d => d.count), 1);
+    const maxPx = 100; // max bar height in px (leaves room for label)
 
-    container.style.setProperty('--bar-count', DAU_DATA.length);
     container.innerHTML = '';
 
     DAU_DATA.forEach(function (d) {
@@ -22,7 +23,7 @@ function renderDauChart() {
 
         const bar = document.createElement('div');
         bar.className = 'dau-bar';
-        bar.style.setProperty('--h', ((d.count / max) * 100) + '%');
+        bar.style.height = Math.max(3, Math.round((d.count / max) * maxPx)) + 'px';
         bar.title = d.label + ': ' + d.count + ' user' + (d.count !== 1 ? 's' : '');
 
         const lbl = document.createElement('span');
@@ -69,6 +70,20 @@ function updateOnlineTable(users) {
             '<td>' + ago + '</td>' +
             '</tr>';
     }).join('');
+}
+
+// ── User search ──────────────────────────────────────────────────────────────
+function initUserSearch() {
+    const input = document.getElementById('userSearch');
+    if (!input) return;
+
+    input.addEventListener('input', function () {
+        const q = this.value.toLowerCase().trim();
+        document.querySelectorAll('.users-panel tbody tr').forEach(function (row) {
+            if (row.querySelector('.empty-row')) return; // keep the "no users" row
+            row.style.display = q === '' || row.textContent.toLowerCase().includes(q) ? '' : 'none';
+        });
+    });
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

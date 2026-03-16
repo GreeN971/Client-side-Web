@@ -28,6 +28,10 @@
                         <p class="welcome-subtitle">Ready to track your mood today?</p>
                     </div>
 
+                    <!-- Inline alerts (errors / success from server or client) -->
+                    <div id="login-error" class="form-error-msg hidden"></div>
+                    <div id="login-success" class="form-success-msg hidden"></div>
+
                     <!-- Form -->
                     <form id="loginForm" class="auth-form" action="includes/login.inc.php" method="post" novalidate>
                         <!-- Email Input -->

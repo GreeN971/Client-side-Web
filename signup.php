@@ -59,7 +59,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="email-input" class="form-label">Username</label>
+                            <label for="username-input" class="form-label">Username</label>
                             <div class="input-wrapper">
                                 <input
                                     id="username-input"
@@ -70,6 +70,7 @@
                                     class="form-input"
                                 />
                             </div>
+                            <span class="error-text hidden" id="username-error">Username must be at least 3 characters.</span>
                         </div>
 
                         <!-- Password Input -->
@@ -95,6 +96,22 @@
                                         <line x1="1" y1="1" x2="23" y2="23"></line>
                                     </svg>
                                 </button>
+                            </div>
+                        </div>
+
+                        <!-- Password Requirements -->
+                        <div class="password-requirements" id="password-requirements">
+                            <div class="requirement" id="req-length">
+                                <span class="requirement-check"></span>
+                                <span>8+ characters</span>
+                            </div>
+                            <div class="requirement" id="req-upper">
+                                <span class="requirement-check"></span>
+                                <span>1 uppercase</span>
+                            </div>
+                            <div class="requirement" id="req-special">
+                                <span class="requirement-check"></span>
+                                <span>1 special char</span>
                             </div>
                         </div>
 

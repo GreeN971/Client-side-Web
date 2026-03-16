@@ -1,5 +1,5 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) session_start();
 
 if (!isset($_SESSION['userid'])) {
     header("Location: index.php");
@@ -16,10 +16,7 @@ require_once "classes/checkin.classes.php";
 // Update presence and enforce ban status on every page load
 $adminModel = new Admin();
 
-$stmt = $adminModel->connect()->prepare('SELECT is_banned FROM users WHERE users_id = ?');
-$stmt->execute([$userId]);
-$userRow = $stmt->fetch(PDO::FETCH_ASSOC);
-if ($userRow && !empty($userRow['is_banned'])) {
+if ($adminModel->isUserBanned($userId)) {
     session_destroy();
     header("Location: index.php?error=banned");
     exit();

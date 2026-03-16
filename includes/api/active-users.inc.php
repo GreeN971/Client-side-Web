@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (empty($_SESSION['userid']) || empty($_SESSION['is_admin']) || (int)$_SESSION['is_admin'] !== 1) {
     http_response_code(403);
@@ -13,6 +15,6 @@ require_once "../../classes/dbh.classes.php";
 require_once "../../classes/admin.classes.php";
 
 $admin       = new Admin();
-$activeUsers = $admin->getActiveUsers();
+$activeUsers = $admin->getDemoOnlineUsers();
 
 echo json_encode($activeUsers);

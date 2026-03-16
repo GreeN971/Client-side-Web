@@ -1,3 +1,5 @@
 config/.env
 classes/dbh.classes.php
 ca.pem
+Client-side-Web.code-workspace
+queries.sql

@@ -1,5 +1,5 @@
 <?php
-    session_start();
+if (session_status() === PHP_SESSION_NONE) session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,8 +28,38 @@
                         <h1 class="welcome-title">Forgot your password?</h1>
                     </div>
 
+                    <?php if (isset($_GET['error'])): ?>
+                        <p class="form-error-msg"><?php
+                            $errs = [
+                                'emptyinput'           => 'Please fill in all fields.',
+                                'passwordtooshort'     => 'Password must be at least 8 characters.',
+                                'passworddoesnotmatch' => 'Passwords do not match.',
+                                'usernotfound'         => 'No account found with those details.',
+                            ];
+                            echo htmlspecialchars($errs[$_GET['error']] ?? 'Something went wrong.');
+                        ?></p>
+                    <?php endif; ?>
+
                     <!-- Form -->
-                    <form id="forgotPasswordForm" class="auth-form" novalidate>
+                    <form id="forgotPasswordForm" class="auth-form" method="POST"
+                          action="includes/forgot-password.inc.php" novalidate>
+
+                        <!-- Username or Email -->
+                        <div class="form-group">
+                            <label for="identification" class="form-label">Username or Email</label>
+                            <div class="input-wrapper">
+                                <input
+                                    id="identification"
+                                    name="identification"
+                                    placeholder="Your username or email"
+                                    type="text"
+                                    autocomplete="username"
+                                    required
+                                    class="form-input"
+                                />
+                            </div>
+                        </div>
+
                         <!-- Pet Name Input -->
                         <div class="form-group">
                             <label for="pet-name" class="form-label">Enter your pet's name</label>
@@ -100,7 +130,7 @@
 
                         <!-- Actions -->
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary btn-full">Submit</button>
+                            <button type="submit" name="forgot_submit" class="btn btn-primary btn-full">Reset Password</button>
                             
                             <div class="form-links centered">
                                 <a href="index.php" class="link-primary">Back to Login</a>
