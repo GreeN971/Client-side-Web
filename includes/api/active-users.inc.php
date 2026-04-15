@@ -15,6 +15,6 @@ require_once "../../classes/dbh.classes.php";
 require_once "../../classes/admin.classes.php";
 
 $admin       = new Admin();
-$activeUsers = $admin->getDemoOnlineUsers();
+$activeUsers = $admin->getActiveUsers();
 
 echo json_encode($activeUsers);

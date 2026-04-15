@@ -1,0 +1,103 @@
+POUŽITÉ JAVASCRIPT A HTML TECHNOLOGIE
+======================================
+
+1. FRAMEWORK
+------------
+Projekt nepoužívá žádný JavaScriptový framework ani knihovnu (žádný React,
+Vue, Angular ani jQuery). Veškerý kód je psán v čistém JavaScriptu ve standardu
+ES6+, který přináší moderní syntaxi nativně bez nutnosti závislostí:
+
+  - Třídy (class) s privátními statickými poli (static #field) — viz Errors
+    třída v alerts.js.
+  - Arrow funkce, template literals, const/let, URLSearchParams a nativní
+    fetch() API.
+  - Inicializační vzor: každý soubor registruje svou logiku uvnitř
+    DOMContentLoaded, čímž zajišťuje, že skripty neběží dříve, než je DOM
+    připraven.
+  - Skripty jsou vždy vloženy na konci <body> — není třeba defer ani async.
+  - Data z PHP backendu jsou předávána do JavaScriptu jako inline const
+    proměnné vygenerované přes json_encode() přímo v HTML stránce, těsně před
+    načtením externích JS souborů.
+
+HTML používá standard HTML5 (<!DOCTYPE html>) ve všech souborech a využívá
+sémantické elementy jako <main>, <section>, <article>, <aside>, <header>,
+<nav> a <time>.
+
+
+2. BEZPEČNOSTNÍ TECHNIKY
+------------------------
+a) Escapování HTML při vkládání do DOM (ochrana proti XSS)
+     Na místech, kde se dynamicky generovaný obsah vkládá do stránky pomocí
+     innerHTML, je nejprve aplikována pomocná funkce escHtml() (definovaná v
+     admin.js). Ta nahrazuje nebezpečné znaky & < > " jejich HTML entitami,
+     čímž zabraňuje tomu, aby uživatelem zadaný text byl prohlížečem
+     interpretován jako HTML nebo JavaScript. Všude tam, kde to je možné, se
+     namísto innerHTML používá textContent, který vložený obsah automaticky
+     považuje za prostý text a žádné escapování nevyžaduje.
+
+b) Whitelist pro URL parametry (ochrana proti reflektovanému XSS)
+     Po přesměrování z PHP backendu může URL obsahovat parametry jako
+     ?error=invalid_login. Tyto hodnoty jsou v alerts.js čteny pomocí
+     URLSearchParams, ale nikdy nejsou přímo vloženy do stránky. Místo toho
+     slouží jako klíče pro vyhledání v pevně zakódované mapě hlášení (#messages).
+     Do DOM se tedy dostane pouze předem schválený text — nikdy samotná hodnota
+     z URL. Navíc je URL ihned po zobrazení zprávy vyčištěna pomocí
+     window.history.replaceState(), aby parametr nezůstal v adresním řádku.
+
+c) Klientská validace formulářů
+     Před odesláním formuláře provádí auth.js sérii kontrol na straně
+     prohlížeče: povinná pole nesmí být prázdná, heslo musí mít alespoň 8 znaků,
+     obsahovat alespoň jedno velké písmeno a alespoň jeden speciální znak,
+     a obě hesla (při registraci nebo resetu) musí být shodná. Uživatelské jméno
+     musí mít alespoň 3 znaky. Tato validace slouží především ke zlepšení
+     uživatelského zážitku — autoritativní kontroly probíhají vždy na straně
+     serveru v PHP.
+
+d) Ochrana před odesláním neúplného formuláře check-inu
+     Formulář pro check-in (výběr emoce) v analytics.js blokuje odeslání
+     pomocí event listeneru na submit události, pokud skryté pole s vybranou
+     emocí ještě neobsahuje hodnotu. Tím se zabraňuje odeslání prázdného nebo
+     neplatného záznamu na server.
+
+e) Bezpečné vkládání PHP dat do inline skriptů (JSON_HEX_TAG)
+     Při generování inline JavaScriptu z PHP dat (například data pro grafy
+     v analytics.php) se používá json_encode() s příznakem JSON_HEX_TAG.
+     Tento příznak zajistí, že znaky < a > jsou v JSON výstupu escapovány jako
+     \u003C a \u003E. Tím se zabrání situaci, kdy by data obsahující řetězec
+     </script> předčasně ukončila blok skriptu a umožnila injekci kódu.
+
+f) Autocomplete atributy na formulářových polích
+     Formulářová pole mají správně nastaveny atributy autocomplete, které
+     prohlížeči a správcům hesel sdělují, jak s polem zacházet:
+       - autocomplete="current-password" na přihlašovacím poli zajistí, že
+         správce hesel navrhne uložené heslo.
+       - autocomplete="new-password" na polích pro nové heslo zabrání tomu,
+         aby prohlížeč automaticky doplnil stávající uložené heslo.
+       - autocomplete="off" je použito na bezpečnostních otázkách (jméno
+         mazlíčka) a na administrátorském vyhledávání uživatelů, kde
+         automatické doplňování není žádoucí.
+
+g) Sémantické HTML a přístupnost (ARIA)
+     Stránky používají sémantické HTML5 elementy (<main>, <section>,
+     <article>, <aside>, <nav>, <time>), které zpřehledňují strukturu
+     dokumentu a pomáhají asistivním technologiím. Interaktivní prvky bez
+     viditelného popisku (tlačítka pro zobrazení hesla, zavření modálního
+     okna, navigace v kalendáři) mají atribut aria-label. Vizuální výplňové
+     buňky v kalendáři jsou označeny aria-hidden="true" a tabindex="-1", aby
+     je odečítače obrazovky ignorovaly. Všechna formulářová pole jsou správně
+     propojena s popisky pomocí <label for="...">.
+
+h) Tlačítka mimo submit jsou explicitně type="button"
+     Všechna tlačítka, která nemají odeslat formulář (přepínání viditelnosti
+     hesla, zavření modálu, navigace zpět, výběr emoce apod.), mají atribut
+     type="button". Tím se zabrání nechtěnému odeslání formuláře při kliknutí
+     na tato tlačítka, k čemuž by jinak došlo automaticky v případě, že se
+     tlačítko nachází uvnitř elementu <form>.
+
+i) Bezpečné načítání aktivních uživatelů přes fetch()
+     Jediný AJAX požadavek v projektu (admin.js) načítá seznam právě
+     přihlášených uživatelů z API endpointu pomocí fetch() a metody GET.
+     Odpověď je zpracována jako JSON a vykreslena do tabulky s pomocí escHtml().
+     Jelikož jde o čtecí operaci bez vedlejších efektů, nevyžaduje CSRF ochranu.
+     Chyby při načítání jsou tiše ignorovány — přechodná selhání pollingové
+     smyčky (každých 5 sekund) nemají zobrazovat chyby uživateli.

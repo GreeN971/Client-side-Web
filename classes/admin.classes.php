@@ -146,7 +146,11 @@ class Admin extends Dbh {
         $r = $db->query('SELECT COUNT(*) FROM demo_checkins');
         $totalCheckins = (int) $r->fetchColumn();
 
-        $r = $db->query("SELECT COUNT(DISTINCT fake_user_id) FROM demo_checkins WHERE DATE(created_at) = CURDATE()");
+        $r = $db->query(
+            'SELECT COUNT(*) FROM users
+             WHERE is_admin = 0
+               AND DATE(last_active) = CURDATE()'
+        );
         $activeToday = (int) $r->fetchColumn();
 
         $r = $db->query('SELECT COUNT(*) FROM demo_sessions');
@@ -165,9 +169,9 @@ class Admin extends Dbh {
      */
     public function getDemoDailyActiveUsers() {
         $stmt = $this->connect()->prepare(
-            'SELECT DATE(created_at) AS date, COUNT(DISTINCT fake_user_id) AS count
+            'SELECT DATE(created_at) AS date, COUNT(*) AS count
              FROM demo_checkins
-             WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 29 DAY)
+             WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 89 DAY)
              GROUP BY DATE(created_at)
              ORDER BY date ASC'
         );

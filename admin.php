@@ -15,9 +15,9 @@ $users   = $admin->getAllUsers();
 $dailyAU = $admin->getDemoDailyActiveUsers();
 $dailyAU = array_combine(array_column($dailyAU, 'date'), array_column($dailyAU, 'count'));
 
-// Build a full 30-day series so days with 0 are included
+// Build a full 90-day series so days with 0 are included
 $dauData = [];
-for ($i = 29; $i >= 0; $i--) {
+for ($i = 89; $i >= 0; $i--) {
     $date          = date('Y-m-d', strtotime("-{$i} days"));
     $shortDate     = date('M j', strtotime($date));
     $dauData[]     = ['label' => $shortDate, 'count' => (int)($dailyAU[$date] ?? 0)];
@@ -81,7 +81,7 @@ for ($i = 29; $i >= 0; $i--) {
 
         <!-- ── Daily active users chart ─────────────────────────────────── -->
         <section class="panel dau-panel">
-            <h2 class="panel-title">Daily Active Users — last 30 days</h2>
+            <h2 class="panel-title">Emotions Logged — last 90 days</h2>
             <div class="dau-chart-wrap">
                 <div class="dau-chart" id="dauChart"></div>
             </div>
